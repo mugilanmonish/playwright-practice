@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Notification Example</title>
+</head>
+<body>
+
+  <h1>Browser Notification Example</h1>
+  
+  <button id="notifyButton">Show Notification</button>
+  <p id="permissionStatus">Notification permission: Not checked yet</p>
+
+  <script>
+    // Check if the browser supports notifications
+    if (!("Notification" in window)) {
+      alert("This browser does not support notifications.");
+    }
+
+    // Function to request notification permission
+    function requestNotificationPermission() {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+          document.getElementById("permissionStatus").innerText = "Notification permission: Allowed";
+        } else {
+          console.log("Notification permission denied.");
+          document.getElementById("permissionStatus").innerText = "Notification permission: Not Allowed";
+        }
+      });
+    }
+
+    // Function to show notification
+    function showNotification() {
+      if (Notification.permission === "granted") {
+        new Notification("Hello!", {
+          body: "This is a sample notification.",
+          icon: "https://via.placeholder.com/150"
+        });
+      } else {
+        alert("Notification permission not granted.");
+      }
+    }
+
+    // Check and update the status of notification permission
+    if (Notification.permission === "default") {
+      requestNotificationPermission(); // Request permission if it's not decided
+    } else if (Notification.permission === "granted") {
+      document.getElementById("permissionStatus").innerText = "Notification permission: Allowed";
+    } else {
+      document.getElementById("permissionStatus").innerText = "Notification permission: Not Allowed";
+    }
+
+    // Trigger notification on button click
+    document.getElementById("notifyButton").addEventListener("click", () => {
+      showNotification();
+    });
+  </script>
+
+</body>
+</html>
