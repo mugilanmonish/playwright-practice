@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 test('Triggering Url in Browser', async ({page}) => {
     
     await page.goto('https://www.redbus.in/');
-    // await page.waitForLoadState('networkidle')
 });
 
 /**
@@ -104,5 +103,4 @@ test('Double Click', async({page})=>{
     await page.locator("button[id='btn20']").dblclick()
     const verify = await page.locator("//button[@id='btn20']/following-sibling::span").textContent()
     console.log(verify);
-    
 })
