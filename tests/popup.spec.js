@@ -104,7 +104,7 @@ test('File Download Popup', async ({ page }) => {
     expect(fileContent).toContain('Mugi');
 })
 
-test.only('File Download Popup and validating pdf content', async ({ page }) => {
+test('File Download Popup and validating pdf content', async ({ page }) => {
     await page.goto('https://examplefile.com/document/pdf/10-mb-pdf')
 
     const [download] = await Promise.all([

@@ -42,7 +42,7 @@ module.exports = defineConfig({
   expect: {
     timeout: 10000
   },
-  timeout: 60000,
+  timeout: 120000,
 
   projects: [
     {
