@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Validation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+    }
+    input {
+      padding: 8px;
+      width: 250px;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+    .success {
+      color: green;
+      font-size: 1em;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login Form</h2>
+  <form id="myForm" onsubmit="return validateForm(event)">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" />
+      <div id="usernameError" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" />
+      <div id="passwordError" class="error"></div>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="successMessage" class="success"></div>
+
+  <script>
+    function validateForm(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const usernameError = document.getElementById("usernameError");
+      const passwordError = document.getElementById("passwordError");
+      const successMessage = document.getElementById("successMessage");
+
+      // Clear previous errors and success message
+      usernameError.textContent = "";
+      passwordError.textContent = "";
+      successMessage.textContent = "";
+
+      let valid = true;
+
+      // Username validation
+      const trimmedUsername = username.trim();
+      if (username !== trimmedUsername) {
+        usernameError.textContent = "No leading or trailing spaces allowed.";
+        valid = false;
+      } else if (!/^[A-Za-z]{5,10}$/.test(username)) {
+        usernameError.textContent = "Username must be 5-10 letters only.";
+        valid = false;
+      }
+
+      // Password validation
+      const trimmedPassword = password.trim();
+      if (password !== trimmedPassword) {
+        passwordError.textContent = "No leading or trailing spaces allowed.";
+        valid = false;
+      } else if (!/^.{8,14}$/.test(password)) {
+        passwordError.textContent = "Password must be 8-14 characters.";
+        valid = false;
+      } else if (!/[a-z]/.test(password)) {
+        passwordError.textContent = "Password must contain at least 1 lowercase letter.";
+        valid = false;
+      } else if (!/[A-Z]/.test(password)) {
+        passwordError.textContent = "Password must contain at least 1 uppercase letter.";
+        valid = false;
+      } else if (!/[0-9]/.test(password)) {
+        passwordError.textContent = "Password must contain at least 1 number.";
+        valid = false;
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        passwordError.textContent = "Password must contain at least 1 special character.";
+        valid = false;
+      }
+
+      // If valid, show success message
+      if (valid) {
+        successMessage.textContent = "Successfully logged in!";
+      }
+
+      return false; // Prevent default form submission
+    }
+  </script>
+</body>
+</html>
