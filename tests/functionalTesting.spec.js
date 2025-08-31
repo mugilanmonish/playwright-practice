@@ -37,6 +37,12 @@ const formFields = [
     }
 ]
 
+const combinations = [
+    { username: 'Johna', password: 'Deoraj@1', isValid: true }, // both positive
+    { username: 'John', password: 'Deoraj1', isValid: false }, // both negative
+    { username: 'Johna', password: 'deoraj1', isValid: false }, // username positive, password negative
+    { username: 'j', password: 'Deoraj@1', isValid: false }, // username negative, password positive
+]
 test.describe('Functional Testing', () => {
     let context;
     let page;
@@ -47,9 +53,9 @@ test.describe('Functional Testing', () => {
         await page.goto('file:///D:/SDET/B2B/Playwright_Practice/Files/formValidation.html');
     });
 
-    // test.afterAll(async () => {
-    //     await context.close();
-    // });
+    test.afterAll(async () => {
+        await context.close();
+    });
 
     for (const field of formFields) {
         test.describe(`${field.name} validation`, () => {
@@ -70,5 +76,28 @@ test.describe('Functional Testing', () => {
                 });
             }
         });
+    }
+
+    for (const fields of combinations) {
+        test.only(`Input ${fields.username} and ${fields.password} should be ${fields.isValid ? 'valid' : 'invalid'}`, async () => {
+            const usernameTxtFld = page.locator('input[id="username"]');
+            const passwordTxtFld = page.locator('input[id="password"]');
+
+            await usernameTxtFld.fill(fields.username);
+            await passwordTxtFld.fill(fields.password);
+
+            const submitButton = page.locator("//button[text()='Submit']");
+            await submitButton.click();
+
+            let successLabel;
+            let errorCount;
+            if (fields.isValid)
+                successLabel = await page.locator("//div[text()='Successfully logged in!']").textContent();
+            else
+                errorCount = await page.locator(`//div[@class="error" and contains(text(),'Username') or contains(text(),'Password')]`).count()
+
+            if (fields.isValid) expect(successLabel).toEqual('Successfully logged in!');
+            else expect(await errorCount).toBeGreaterThanOrEqual(1);
+        })
     }
 });
